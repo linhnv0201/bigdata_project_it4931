@@ -1,0 +1,5 @@
+kafka-python-ng
+kafka-python
+setuptools
+numpy==1.26.4
+hdfs

@@ -1,0 +1,16 @@
+kafka-topics.sh --delete --topic batch_data --bootstrap-server localhost:9092
+kafka-topics.sh --delete --topic realtime_data --bootstrap-server localhost:9092
+kafka-topics.sh --create --topic batch_data --bootstrap-server localhost:9092 --partitions 3 --replication-factor 1
+kafka-topics.sh --create --topic realtime_data --bootstrap-server localhost:9092 --partitions 3 --replication-factor 1
+
+
+
+
+python3 '/home/pc/project/kafka/consumer.py'
+
+
+python3 /home/pc/project/kafka/producer.py --files /home/pc/data/title.basics.tsv /home/pc/data/title.ratings.tsv --topic batch_data --batch_size=1000 --use_batching --batch_sleep 5
+
+python3 /home/pc/project/kafka/producer.py --files /home/pc/data/title.ratings.tsv --topic realtime_data --batch_size=1 --use_batching
+
+spark-submit --packages org.apache.spark:spark-sql-kafka-0-10_2.12:3.3.1,org.mongodb.spark:mongo-spark-connector_2.12:3.0.1 /home/pc/project/batch_stream_processor.py
